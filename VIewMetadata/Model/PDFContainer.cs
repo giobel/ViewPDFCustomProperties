@@ -13,16 +13,12 @@ namespace VIewMetadata.Model
     public class PDFContainer
     {
         readonly static string arupMetadataKey = "ARUP_EMBEDDED_DATA";
+        public string SheetNumber { get; set; }
         public string SheetName { get; set; }
-
         public string Revision { get; set; }
-
         public string Status { get; set; }
-
         public string IssueDate { get; set; }
-
         public string FilePath { get; set; }
-
         public string ColorSet { get; set; }
 
         public static FileInfo[] GetDirectoryContent(string Folder, string FileType)
@@ -47,8 +43,11 @@ namespace VIewMetadata.Model
 
 
             foreach (var property in properties)
-            {     
-                    if (property.Key == "/Sheet Name")
+            {
+                if (property.Key == "/Sheet Number")
+                    container.SheetNumber = RemoveFirstLast(property.Value);
+
+                if (property.Key == "/Sheet Name")
                         container.SheetName = RemoveFirstLast(property.Value);
 
                     if (property.Key == "/Revision")
@@ -62,17 +61,18 @@ namespace VIewMetadata.Model
             }
             document.Close();
 
-            if (container.Status == "Construction")
-                container.ColorSet = "#F5DD93";
-            else if (container.Status == "Certification")
-                container.ColorSet = "#ffb3ba";
-            else
-                container.ColorSet = "#baffc9";
+            if (null != container.Revision)
+            {
+                if (container.Revision.Contains("T"))
+                    container.ColorSet = "#F5DD93";
+                else if (container.Revision.Contains("C"))
+                    container.ColorSet = "#baffc9";
+                else
+                    container.ColorSet = "#ffb3ba";
+            }
+            
             return container;
         }
-
-
-
 
         private static string RemoveFirstLast(PdfSharp.Pdf.PdfItem input)
         {

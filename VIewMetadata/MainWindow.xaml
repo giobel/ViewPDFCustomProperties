@@ -23,13 +23,20 @@
         
         <DataGrid Margin="0,10,0,0"  
                   Grid.Row="1" 
+                  AutoGenerateColumns="False"
                   ItemsSource="{Binding PDFList}" 
                   CanUserAddRows="False" 
                   SelectionMode="Single" 
                   SelectedItem="{Binding SelectedPDF}" 
                   SelectionUnit="FullRow"
-                  
-                 >
+                  >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Sheet Number" Binding="{Binding SheetNumber}"/>
+                <DataGridTextColumn Header="Sheet Name" Binding="{Binding Path=SheetName}" />
+                <DataGridTextColumn Header="Revision" Binding="{Binding Path=Revision}" />
+                
+                <DataGridTextColumn Header="Issue Date" Binding="{Binding Path=IssueDate}" />
+            </DataGrid.Columns>
             <!--<DataGrid.Columns>
                 <DataGridTextColumn Header="Notes" Width="*" Binding="{Binding SheetName}" />
                 <DataGridTextColumn Header="Description" Width="*" Binding="{Binding Path=Revision}" />
